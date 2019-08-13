@@ -63,3 +63,7 @@ variable "private_subnets" {
   ]
 }
 
+variable "nat_gateway" {
+  type    = bool
+  default = true
+}

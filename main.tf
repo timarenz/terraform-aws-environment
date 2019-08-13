@@ -69,7 +69,8 @@ resource "aws_default_route_table" "main" {
 }
 
 resource "aws_eip" "nat_gw" {
-  vpc = true
+  count = var.nat_gateway ? 1 : 0
+  vpc   = true
 
   tags = merge(local.common_tags, { Name = "${var.environment_name}-nat-gw-ip" })
 }
@@ -80,14 +81,18 @@ resource "random_shuffle" "default_public_subnet" {
 }
 
 resource "aws_nat_gateway" "main" {
-  allocation_id = aws_eip.nat_gw.id
+  count = var.nat_gateway ? 1 : 0
+
+  allocation_id = aws_eip.nat_gw[0].id
   subnet_id     = element(random_shuffle.default_public_subnet.result, 0)
 
   tags = merge(local.common_tags, { Name = "${var.environment_name}-nat-gw" })
 }
 
 resource "aws_route" "private_internet_access" {
+  count = var.nat_gateway ? 1 : 0
+
   route_table_id         = aws_vpc.main.default_route_table_id
   destination_cidr_block = "0.0.0.0/0"
-  nat_gateway_id         = aws_nat_gateway.main.id
+  nat_gateway_id         = aws_nat_gateway.main[0].id
 }
