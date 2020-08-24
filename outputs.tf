@@ -37,3 +37,11 @@ output "public_subnet_availability_zone_ids" {
 output "private_subnet_availability_zone_ids" {
   value = aws_subnet.private[*].availability_zone_id
 }
+
+output "default_route_table_id" {
+  value = aws_vpc.main.default_route_table_id
+}
+
+output "public_route_table_id" {
+  value = aws_route_table.public.id
+}
