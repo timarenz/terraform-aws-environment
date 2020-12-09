@@ -25,7 +25,7 @@ resource "aws_subnet" "public" {
   availability_zone       = element(data.aws_availability_zones.available.names, count.index)
   map_public_ip_on_launch = true
 
-  tags = merge(local.common_tags, lookup(var.public_subnets[count.index], "tags") == null ? {} : lookup(var.public_subnets[count.index], "tags"), { Name = "${lookup(var.public_subnets[count.index], "name")}" })
+  tags = merge(local.common_tags, lookup(var.public_subnets[count.index], "tags") == null ? {} : lookup(var.public_subnets[count.index], "tags"), { Name = lookup(var.public_subnets[count.index], "name") })
 }
 
 resource "aws_subnet" "private" {
@@ -35,7 +35,7 @@ resource "aws_subnet" "private" {
   availability_zone       = element(data.aws_availability_zones.available.names, count.index)
   map_public_ip_on_launch = false
 
-  tags = merge(local.common_tags, lookup(var.private_subnets[count.index], "tags") == null ? {} : lookup(var.private_subnets[count.index], "tags"), { Name = "${lookup(var.private_subnets[count.index], "name")}" })
+  tags = merge(local.common_tags, lookup(var.private_subnets[count.index], "tags") == null ? {} : lookup(var.private_subnets[count.index], "tags"), { Name = lookup(var.private_subnets[count.index], "name") })
 }
 
 resource "aws_internet_gateway" "main" {
