@@ -1,3 +1,8 @@
+variable "name" {
+  type    = string
+  default = null
+}
+
 variable "environment_name" {
   type = string
 }
@@ -17,7 +22,7 @@ variable "cidr_block" {
 }
 
 variable "tags" {
-  type    = map
+  type    = map(any)
   default = null
 }
 

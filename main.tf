@@ -1,6 +1,7 @@
 data "aws_region" "current" {}
 
 locals {
+  name = var.name != null ? var.name : var.environment_name
   common_tags = {
     environment = var.environment_name
     owner       = var.owner_name
@@ -13,7 +14,7 @@ resource "aws_vpc" "main" {
   enable_dns_hostnames = true
   enable_dns_support   = true
 
-  tags = merge(local.common_tags, var.tags == null ? {} : var.tags, { Name = "${var.environment_name}-vpc" })
+  tags = merge(local.common_tags, var.tags == null ? {} : var.tags, { Name = "${local.name}-vpc" })
 }
 
 data "aws_availability_zones" "available" {}
@@ -47,7 +48,7 @@ resource "aws_internet_gateway" "main" {
 resource "aws_route_table" "public" {
   vpc_id = aws_vpc.main.id
 
-  tags = merge(local.common_tags, { Name = "${var.environment_name}-rtb-public" })
+  tags = merge(local.common_tags, { Name = "${local.name}-rtb-public" })
 }
 
 resource "aws_route_table_association" "public_to_public" {
@@ -65,14 +66,14 @@ resource "aws_route" "public_internet_access" {
 resource "aws_default_route_table" "main" {
   default_route_table_id = aws_vpc.main.default_route_table_id
 
-  tags = merge(local.common_tags, { Name = "${var.environment_name}-rtb-default" })
+  tags = merge(local.common_tags, { Name = "${local.name}-rtb-default" })
 }
 
 resource "aws_eip" "nat_gw" {
   count = var.nat_gateway ? 1 : 0
   vpc   = true
 
-  tags = merge(local.common_tags, { Name = "${var.environment_name}-nat-gw-ip" })
+  tags = merge(local.common_tags, { Name = "${local.name}-nat-gw-ip" })
 }
 
 resource "random_shuffle" "default_public_subnet" {
@@ -86,7 +87,7 @@ resource "aws_nat_gateway" "main" {
   allocation_id = aws_eip.nat_gw[0].id
   subnet_id     = element(random_shuffle.default_public_subnet.result, 0)
 
-  tags = merge(local.common_tags, { Name = "${var.environment_name}-nat-gw" })
+  tags = merge(local.common_tags, { Name = "${local.name}-nat-gw" })
 }
 
 resource "aws_route" "private_internet_access" {
