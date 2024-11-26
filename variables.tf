@@ -32,17 +32,17 @@ variable "public_subnets" {
     {
       name   = "public-subnet-1"
       prefix = "192.168.30.0/24"
-      tags   = null
+      tags   = {"kubernetes.io/role/internal-elb" = "1"}
     },
     {
       name   = "public-subnet-2"
       prefix = "192.168.31.0/24"
-      tags   = null
+      tags   = {"kubernetes.io/role/internal-elb" = "1"}
     },
     {
       name   = "public-subnet-3"
       prefix = "192.168.32.0/24"
-      tags   = null
+      tags   = {"kubernetes.io/role/internal-elb" = "1"}
     },
   ]
 }
@@ -53,17 +53,17 @@ variable "private_subnets" {
     {
       name   = "private-subnet-1"
       prefix = "192.168.40.0/24"
-      tags   = null
+      tags   = {"kubernetes.io/role/elb" = "1"}
     },
     {
       name   = "private-subnet-2"
       prefix = "192.168.41.0/24"
-      tags   = null
+      tags   = {"kubernetes.io/role/elb" = "1"}
     },
     {
       name   = "private-subnet-3"
       prefix = "192.168.42.0/24"
-      tags   = null
+      tags   = {"kubernetes.io/role/elb" = "1"}
     },
   ]
 }
