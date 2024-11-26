@@ -49,3 +49,7 @@ output "public_route_table_id" {
 output "nat_gateway_public_ip" {
   value = var.nat_gateway ? aws_eip.nat_gw[0].public_ip : null
 }
+
+output "cidr_block" {
+  value = var.cidr_block
+}
