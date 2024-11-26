@@ -71,7 +71,7 @@ resource "aws_default_route_table" "main" {
 
 resource "aws_eip" "nat_gw" {
   count = var.nat_gateway ? 1 : 0
-  vpc   = true
+  domain   = "vpc"
 
   tags = merge(local.common_tags, { Name = "${local.name}-nat-gw-ip" })
 }
