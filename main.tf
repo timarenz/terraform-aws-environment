@@ -52,7 +52,7 @@ resource "aws_route_table" "public" {
 }
 
 resource "aws_route_table_association" "public_to_public" {
-  count          = length(data.aws_availability_zones.available.names)
+  count          = length(var.public_subnets)
   subnet_id      = aws_subnet.public[count.index].id
   route_table_id = aws_route_table.public.id
 }
@@ -70,8 +70,8 @@ resource "aws_default_route_table" "main" {
 }
 
 resource "aws_eip" "nat_gw" {
-  count = var.nat_gateway ? 1 : 0
-  domain   = "vpc"
+  count  = var.nat_gateway ? 1 : 0
+  domain = "vpc"
 
   tags = merge(local.common_tags, { Name = "${local.name}-nat-gw-ip" })
 }
